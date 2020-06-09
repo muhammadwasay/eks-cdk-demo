@@ -1,8 +1,6 @@
-package com.myorg;
+package io.mwk;
 
 import software.amazon.awscdk.core.App;
-
-import java.util.Arrays;
 
 public class EksCdkApp {
     public static void main(final String[] args) {
