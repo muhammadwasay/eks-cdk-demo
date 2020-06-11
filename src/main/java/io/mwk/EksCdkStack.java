@@ -6,12 +6,11 @@ import software.amazon.awscdk.core.StackProps;
 import software.amazon.awscdk.services.ec2.InstanceType;
 import software.amazon.awscdk.services.eks.Cluster;
 import software.amazon.awscdk.services.eks.DefaultCapacityType;
-import software.amazon.awscdk.services.eks.NodegroupOptions;
 import software.amazon.awscdk.services.eks.NodegroupAmiType;
+import software.amazon.awscdk.services.eks.NodegroupOptions;
 import software.amazon.awscdk.services.iam.AccountRootPrincipal;
+import software.amazon.awscdk.services.iam.ManagedPolicy;
 import software.amazon.awscdk.services.iam.Role;
-
-import java.util.Map;
 
 import static java.util.Arrays.asList;
 
@@ -23,12 +22,15 @@ public class EksCdkStack extends Stack {
     public EksCdkStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
 
-        /*var clusterAdmin = Role.Builder.create(this, "AdminRole")
+        var clusterAdmin = Role.Builder.create(this, "AdminRole")
                 .assumedBy(new AccountRootPrincipal())
-                .build();*/
+                .managedPolicies(asList(ManagedPolicy.fromManagedPolicyArn(this,"admin-access", "arn:aws:iam::aws:policy/AdministratorAccess")))
+                .build();
 
-        var cluster = Cluster.Builder.create(this, "cluster-self-managed-ec2")
-                /*.mastersRole(clusterAdmin)*/
+        /*var clusterAdmin = Role.fromRoleArn(this, "admin-role", "arn:aws:iam::481137230390:role/my-admin-role");*/
+
+        var cluster = Cluster.Builder.create(this, "demo-eks-cluster")
+                .mastersRole(clusterAdmin)
                 .kubectlEnabled(true)
                 .defaultCapacityType(DefaultCapacityType.NODEGROUP)
                 .defaultCapacity(0)
@@ -43,15 +45,5 @@ public class EksCdkStack extends Stack {
                 .amiType(NodegroupAmiType.AL2_X86_64)
                 .diskSize(8)
                 .build());
-
-        /*cluster.addResource("mypod", Map.of(
-                "apiVersion", "v1",
-                "kind", "Pod",
-                "metadata", Map.of("name", "mypod"),
-                "spec", Map.of(
-                        "containers", asList(Map.of(
-                                "name", "hello",
-                                "image", "paulbouwer/hello-kubernetes:1.5",
-                                "ports", asList(Map.of("containerPort", 8080)))))));*/
     }
 }
