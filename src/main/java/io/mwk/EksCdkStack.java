@@ -6,8 +6,8 @@ import software.amazon.awscdk.core.StackProps;
 import software.amazon.awscdk.services.ec2.InstanceType;
 import software.amazon.awscdk.services.eks.Cluster;
 import software.amazon.awscdk.services.eks.DefaultCapacityType;
+import software.amazon.awscdk.services.eks.Nodegroup;
 import software.amazon.awscdk.services.eks.NodegroupAmiType;
-import software.amazon.awscdk.services.eks.NodegroupOptions;
 import software.amazon.awscdk.services.iam.AccountRootPrincipal;
 import software.amazon.awscdk.services.iam.ManagedPolicy;
 import software.amazon.awscdk.services.iam.Role;
@@ -27,8 +27,6 @@ public class EksCdkStack extends Stack {
                 .managedPolicies(asList(ManagedPolicy.fromManagedPolicyArn(this,"admin-access", "arn:aws:iam::aws:policy/AdministratorAccess")))
                 .build();
 
-        /*var clusterAdmin = Role.fromRoleArn(this, "admin-role", "arn:aws:iam::481137230390:role/my-admin-role");*/
-
         var cluster = Cluster.Builder.create(this, "demo-eks-cluster")
                 .mastersRole(clusterAdmin)
                 .kubectlEnabled(true)
@@ -37,13 +35,14 @@ public class EksCdkStack extends Stack {
                 .defaultCapacityInstance(new InstanceType("t2.micro"))
                 .build();
 
-        cluster.addNodegroup("nodegroup", NodegroupOptions
-                .builder()
+        Nodegroup.Builder.create(this, "nodegroup")
+                .nodegroupName("eks-demo-nodegroup")
+                .cluster(cluster)
                 .instanceType(new InstanceType("t2.micro"))
+                .amiType(NodegroupAmiType.AL2_X86_64)
                 .minSize(1)
                 .maxSize(1)
-                .amiType(NodegroupAmiType.AL2_X86_64)
                 .diskSize(8)
-                .build());
+                .build();
     }
 }
