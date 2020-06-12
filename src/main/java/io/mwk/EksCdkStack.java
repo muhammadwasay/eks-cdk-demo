@@ -26,8 +26,8 @@ public class EksCdkStack extends Stack {
 
         var deployMicroservice = (!imageTag.isBlank()) ? true : false;
         var twitchMicroserviceImage = "481137230390.dkr.ecr.us-east-1.amazonaws.com/java-twitch-integration:"+imageTag;
-        var twitchAppClientId = "djso1368ggr0fmbxgpijy0pxhsw712";
-        var twitchAppClientSecret = "gp807tyjhao85g86z3269qvq06g6zw";
+        var twitchAppClientId = "";
+        var twitchAppClientSecret = "";
 
         var clusterAdmin = Role.Builder.create(this, "AdminRole")
                 .assumedBy(new AccountRootPrincipal())

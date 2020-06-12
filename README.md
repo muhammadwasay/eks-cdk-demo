@@ -1,18 +1,4 @@
-# Welcome to your CDK Java project!
-
-This is a blank project for Java development with CDK.
-
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
-
-It is a [Maven](https://maven.apache.org/) based project, so you can open this project with any Maven compatible Java IDE to build and run tests.
-
-## Useful commands
-
- * `mvn package`     compile and run tests
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
-
-Enjoy!
+# Demo EKS Cluster
+* Build an [AWS EKS](https://aws.amazon.com/eks/) cluster backed by EC2 [managed node group](https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html) consisting of two t2.micro worker nodes.
+* This demo creates a new IAM role and grants it the system:masters permissions in k8s cluster's RBAC configuration.
+* You can use configure you aws client and kubectl client to use this role in order to get access to teh Kubernetes cluster.
